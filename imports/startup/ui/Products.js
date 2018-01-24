@@ -6,23 +6,24 @@ class ProductsView extends Component {
 	constructor(props) {
 
 		super(props);
-
+		console.log(props)
 		this.state = {
 		};
 
 
 	}
 
-componentDidMount(){
-}
+	componentDidMount(){
+
+	}
 
 	render() {
 		const {productsReady, products} = this.props
 		if(!productsReady){
-			return (<div> Loading... </div>)
+			return (<div style={{height: '100vh'}}> <div className='page-title'> Loading... </div> </div>)
 		}
 		return (
-			<div>
+			<div style={{height: '100vh'}}>
 					<div className='page-title'>Products Available For Sale!</div>
 				<div className='card-container'>
 			{
@@ -30,14 +31,16 @@ componentDidMount(){
 				products.map((product, index) =>
 				{
 
-				 return	product.products.map((item, index) => {
+					if(product.quantity > 0){
+
 						return (
 							<div className='card' key={index}>
-								<div className='card-title'>{item.name}</div>
-								<div className='card-label'>Amount Left:</div><div className='card-value'>{item.quantity}</div>
+								<div className='card-title'>{product.name}</div>
+								<div className='card-label'>Amount Left:</div><div className='card-value'>{product.quantity}</div>
 							</div>
 						)
-					})
+
+					}
 
 				})
 				:
@@ -53,8 +56,9 @@ componentDidMount(){
 }
 export default createContainer((props) => {
 	const productsHandle = Meteor.subscribe('products');
+
 	return {
 		productsReady: productsHandle.ready(),
-    products: props.data.find({}).fetch(),
+    products: props.data.find({category: props.category}).fetch(),
   };
 }, ProductsView);

@@ -26,14 +26,21 @@ class Settings extends Component {
 
 	}
 
+	add(){
+
+
+
+
+	}
+
 	render() {
 		const {productsReady, products} = this.props
 		if(!productsReady){
-			return (<div> Loading... </div>)
+			return  (<div style={{height: '100vh'}}> <div className='page-title'> Loading... </div> </div>)
 		}
 		return (
-			<div>
-					<div className='page-title'>Welcome Mathew :)</div>
+			<div >
+					<div className='page-title'>Welcome Matthew :)</div>
 					<div className='page-title'>Here you can add, edit and remove stuff!</div>
 				<div className='card-container'>
 
@@ -44,17 +51,17 @@ class Settings extends Component {
 				products.map((product, index) =>
 				{
 
-				 return	product.products.map((item, index) => {
+
 						return (
 							<div className='card' key={index}>
-								<div className='card-title'>{item.name}</div>
-								<div className='card-label'>Amount Left:</div>	<div>+</div><div className='card-value'>{item.quantity}</div>		<div>-</div>
+								<div className='card-title'>{product.name}</div>
+								<div className='card-label'>Amount Left:</div>	<div>+</div><div className='card-value'>{product.quantity}</div>		<div>-</div>
 
 								<div> Edit </div>
 								<div> Remove </div>
 							</div>
 						)
-					})
+
 
 				})
 				:

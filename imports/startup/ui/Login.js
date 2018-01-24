@@ -28,7 +28,7 @@ export default class Login extends Component {
 	render() {
 
 		return (
-			<div>
+			<div  style={{height: '100vh'}}>
 
 				<div className='page-title'>Login</div>
 				<input placeholder='Email' type='text' onChange={(e) => this.setState({email: e.target.value})}/>
