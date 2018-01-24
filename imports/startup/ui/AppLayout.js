@@ -30,7 +30,6 @@ class AppLayout extends Component {
 	}
 
 	render() {
-		console.log(Meteor.userId())
 		const { content, isAdmin } = this.props;
 
 		return (
@@ -38,14 +37,14 @@ class AppLayout extends Component {
 				<div className="navBar">
 					<div className="menu">
             { this.renderItem('Home', 'home') }
-						{ this.renderItem('Products', 'products') }
-						{ !isAdmin && this.renderItem('Login', 'login') }
+						{ this.renderItem('Categories', 'categories') }
 						{ isAdmin && this.renderItem('Settings', 'settings') }
 						{ this.renderItem('About Us', 'about') }
+						{ !isAdmin && this.renderItem('Login', 'login') }
 						{ isAdmin && this.renderItem('Log Out', Meteor.logout) }
 					</div>
 				</div>
-				<div style={{backgroundColor: 'black'}}>
+				<div style={{backgroundColor: 'black', flex: 1}}>
 					<div className='background1'>
 				{content}
 					</div>

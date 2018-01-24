@@ -8,7 +8,9 @@ import AppLayout from '../ui/AppLayout';
 import Home from '../ui/Home';
 import About from '../ui/About';
 import NotFound from '../ui/NotFound';
+import CategoriesView from '../ui/Categories';
 import ProductsView from '../ui/Products';
+import ProductsAdd from '../ui/products/Add';
 import Settings from '../ui/Settings';
 import Login from '../ui/Login';
 
@@ -86,12 +88,34 @@ exposed.route('/about', {
 	},
 });
 
-exposed.route('/products', {
-	name: 'products',
+exposed.route('/categories', {
+	name: 'categories',
 	action() {
 
 		mount(AppLayout, {
-			content: <ProductsView data={Products} />,
+			content: <CategoriesView/>,
+		});
+
+	},
+});
+
+exposed.route('/products/:category', {
+	name: 'products',
+	action(params) {
+		
+		mount(AppLayout, {
+			content: <ProductsView data={Products} category={params.category	} />,
+		});
+
+	},
+});
+
+exposed.route('/add', {
+	name: 'add',
+	action() {
+
+		mount(AppLayout, {
+			content: <ProductsAdd data={Products} />,
 		});
 
 	},

@@ -16,8 +16,9 @@ export default class About extends Component {
 	render() {
 
 		return (
+			<div  style={{height: '100vh'}}>
 					<div className='page-title'>About Us</div>
-
+			</div>
 		);
 
 	}

@@ -16,9 +16,9 @@ export default class Home extends Component {
 	render() {
 
 		return (
-
+			<div  style={{height: '100vh'}}>
 				<div className='page-title'>Welcome to Kaleidoscope!</div>
-
+			</div>
 		);
 
 	}
