@@ -30,18 +30,20 @@ class AppLayout extends Component {
 	}
 
 	render() {
-		const { content, isAdmin } = this.props;
+		const { content, isAdmin, isLoggedIn } = this.props;
 
 		return (
 			<div>
 				<div className="navBar">
 					<div className="menu">
             { this.renderItem('Home', 'home') }
-						{ this.renderItem('Categories', 'categories') }
+						{ this.renderItem('Products', 'products') }
 						{ isAdmin && this.renderItem('Settings', 'settings') }
 						{ this.renderItem('About Us', 'about') }
-						{ !isAdmin && this.renderItem('Login', 'login') }
-						{ isAdmin && this.renderItem('Log Out', Meteor.logout) }
+						{ isLoggedIn && !isAdmin && this.renderItem('Cart', 'cart') }
+						{ !isLoggedIn && this.renderItem('Login', 'login') }
+						{ !isLoggedIn && this.renderItem('Signup', 'signup') }
+						{ isLoggedIn && this.renderItem('Log Out', Meteor.logout) }
 					</div>
 				</div>
 				<div style={{backgroundColor: 'black', flex: 1}}>
@@ -57,8 +59,8 @@ class AppLayout extends Component {
 }
 
 export default createContainer(() =>
-
 ({
 
-	isAdmin: Meteor.userId() ? true : false,
+	isAdmin: Meteor.userId() && Meteor.user() && Meteor.user().profile.admin ? true : false,
+	isLoggedIn: Meteor.userId() ? true : false,
 }), AppLayout);

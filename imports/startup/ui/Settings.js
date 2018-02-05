@@ -12,24 +12,54 @@ class Settings extends Component {
 		this.goToEdit = this.goToEdit.bind(this);
 		this.goToAdd = this.goToAdd.bind(this);
 		this.remove = this.remove.bind(this);
+		this.increment = this.increment.bind(this);
+		this.deincrement = this.deincrement.bind(this);
 	}
 
-	goToEdit(){
-
+	goToEdit(id){
+		FlowRouter.go('edit', {id})
 	}
 
 	goToAdd(){
 		FlowRouter.go('add')
 	}
 
-	remove(){
+	increment(product){
+		var quantity = Number(product.quantity) + 1;
+
+		Products.update({
+			_id: product._id
+		},{$set: {quantity}}, (err,res) => {
+
+		})
+
+
+
+	}
+	deincrement(product) {
+
+		var quantity = Number(product.quantity);
+		
+		if(quantity - 1 >= 0){
+			quantity = quantity - 1;
+		}
+
+		Products.update({
+			_id: product._id
+		},{$set: {quantity}}, (err,res) => {
+
+		})
 
 	}
 
-	add(){
 
+	remove(id, image_id){
 
-
+		Products.remove({_id: id}, (res) => {
+			Cloudinary.delete(image_id, (err, response) => {
+				console.log(response)
+			})
+		})
 
 	}
 
@@ -55,10 +85,10 @@ class Settings extends Component {
 						return (
 							<div className='card' key={index}>
 								<div className='card-title'>{product.name}</div>
-								<div className='card-label'>Amount Left:</div>	<div>+</div><div className='card-value'>{product.quantity}</div>		<div>-</div>
-
-								<div> Edit </div>
-								<div> Remove </div>
+								<div className='card-label'>Amount Left:</div>	<div onClick={() => this.increment(product)}>+</div><div className='card-value'>{product.quantity}</div>		<div onClick={() => this.deincrement(product)}>-</div>
+								<img style={{height: '50px', width: '50px'}} src={product.image_url}/>
+								<div onClick={() => this.goToEdit(product._id)}> Edit </div>
+								<div onClick={() => this.remove(product._id, product.public_id)}> Remove </div>
 							</div>
 						)
 

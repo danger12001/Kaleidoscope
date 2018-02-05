@@ -13,13 +13,34 @@ import ProductsView from '../ui/Products';
 import ProductsAdd from '../ui/products/Add';
 import Settings from '../ui/Settings';
 import Login from '../ui/Login';
+import Signup from '../ui/Signup';
+import ForgotPassword from '../ui/ForgotPassword';
+import NewPassword from '../ui/NewPassword';
+import Cart from '../ui/Cart';
+import Payment from '../ui/Checkout';
+
+$.cloudinary.config({
+
+	cloud_name:"dlf2sfprr"
+})
+
+let passwordResetToken = ''
+
+
+Accounts.onResetPasswordLink((token, done) => {
+
+	console.log('reset')
+	// passwordResetToken = token;
+	FlowRouter.go(`/reset-password/${token}`);
+
+})
+
 
 Meteor.subscribe('users', function(){
 
 	const users = Meteor.users.find({}).fetch();
 		if(users && users.length === 0 ){
-			Accounts.createUser({email: 'matthewjaybechus@gmail.com', password: 'Admin2017'}, (response) => {
-				console.log(response)
+			Accounts.createUser({email: 'matthewjaybechus@gmail.com', password: 'Admin2017', profile: { admin: true}}, (response) => {
 			})
 		}
 })
@@ -27,10 +48,12 @@ Meteor.subscribe('users', function(){
 
 
 
-
 Accounts.onLogin(() => {
+	let redirect = '/';
 
-	const redirect = 'settings';
+	if(Meteor.userId() && Meteor.user() && Meteor.user().profile.admin){
+	 	redirect = 'settings';
+	}
 
 	const current = FlowRouter.current().route;
 
@@ -66,7 +89,7 @@ exposed.route('/', {
 exposed.route('/settings', {
 	name: 'settings',
 	action(){
-		if(Meteor.userId()){
+		if(Meteor.userId() && Meteor.user() && Meteor.user().profile.admin){
 			const data = {products: Products};
 			mount(AppLayout, {
 				content: <Settings data={data} />,
@@ -88,8 +111,8 @@ exposed.route('/about', {
 	},
 });
 
-exposed.route('/categories', {
-	name: 'categories',
+exposed.route('/products', {
+	name: 'products',
 	action() {
 
 		mount(AppLayout, {
@@ -102,13 +125,36 @@ exposed.route('/categories', {
 exposed.route('/products/:category', {
 	name: 'products',
 	action(params) {
-		
+
 		mount(AppLayout, {
 			content: <ProductsView data={Products} category={params.category	} />,
 		});
 
 	},
 });
+
+exposed.route('/cart', {
+	name: 'cart',
+	action(params) {
+
+		mount(AppLayout, {
+			content: <Cart data={Checkout} />,
+		});
+
+	},
+});
+
+exposed.route('/checkout', {
+	name: 'checkout',
+	action(params) {
+
+		mount(AppLayout, {
+			content: <Payment data={Checkout} />,
+		});
+
+	},
+});
+
 
 exposed.route('/add', {
 	name: 'add',
@@ -121,6 +167,18 @@ exposed.route('/add', {
 	},
 });
 
+exposed.route('/edit/:id', {
+	name: 'edit',
+	action(params) {
+
+		mount(AppLayout, {
+			content: <ProductsAdd data={Products} id={params.id} />,
+		});
+
+	},
+});
+
+
 exposed.route('/login', {
 	name: 'login',
 	action() {
@@ -131,6 +189,40 @@ exposed.route('/login', {
 
 	},
 });
+
+exposed.route('/forgotPassword', {
+	name: 'forgotPassword',
+	action() {
+
+		mount(AppLayout, {
+			content: <ForgotPassword />,
+		});
+
+	},
+});
+
+exposed.route('/reset-password/:token', {
+	name: 'newPassword',
+	action(params) {
+		// console.log(passwordResetToken);
+		mount(AppLayout, {
+			content: <NewPassword resetToken={params.token} />,
+		});
+
+	},
+});
+
+exposed.route('/signup', {
+	name: 'signup',
+	action() {
+
+		mount(AppLayout, {
+			content: <Signup />,
+		});
+
+	},
+});
+
 
 FlowRouter.notFound = {
 	action: () => {
